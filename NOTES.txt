@@ -1,0 +1,42 @@
+how to debug
+============
+
+Resetting the processor
+
+monitor reset halt - Once we flash new code, or if we just want the
+"program" to start over, we call monitor reset halt to reset and halt
+the processor. This will freeze the processor at the reset state,
+before any code has executed.
+
+You must call monitor reset halt after (or immediately before) a load
+command so that the processor starts from the new code. Otherwise, the
+processor will likely crash, sometimes after appearing to work for
+some time. To avoid nightmare debug sessions, be sure you always
+follow load with monitor reset halt!
+
+https://github.com/synthetos/g2/wiki/Debugging-G2-on-OSX-with-GDB-and-Atmel-ICE
+
+(this works with openocd)
+
+
+once the code is loaded *** use 'continue' *** not run. The reset has
+reinitialized the PC and SP.
+
+openocd command
+---------------
+ssh black.local
+openocd -f /usr/local/share/openocd/scripts/board/st_nucleo_f4.cfg
+
+
+
+watch out
+=========
+
+apparently it is possible to link a mixture of arm and thumb
+instructions if one is not careful. linking must be done with gcc (as
+opposed to ld) and the appropriate arch and common args passed in
+order to ensure gcc links the correct run time.
+
+https://answers.launchpad.net/gcc-arm-embedded/+question/224614
+
+TODO: figure out what --spec=nano.specs does.
